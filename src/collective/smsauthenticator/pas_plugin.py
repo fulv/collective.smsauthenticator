@@ -164,6 +164,7 @@ class SMSAuthenticatorPlugin(BasePlugin):
                     )
 
             # Redirecting user to authentication code validation page.
+            import pdb;pdb.set_trace()
             response.redirect(signed_url, lock=1)
             return None
 

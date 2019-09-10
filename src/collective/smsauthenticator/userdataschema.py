@@ -6,7 +6,9 @@ from plone import api
 from plone.app.users.browser.userdatapanel import UserDataPanel
 from plone.app.users.browser.register import BaseRegistrationForm
 from plone.app.users.schema import IUserDataSchema #, IUserDataSchemaProvider
+from plone.supermodel import model
 from plone.z3cform.fieldsets import extensible
+from z3c.form import form
 from z3c.form.field import Fields
 from zope.component import adapter
 from zope.component import adapts
@@ -43,11 +45,19 @@ _ = MessageFactory('collective.smsauthenticator')
 #            # 'authentication_token_valid_until',
 #            )
 
+#class CustomizedUserDataPanel(extensible.FormExtender, form.Form):
 class CustomizedUserDataPanel(extensible.FormExtender):
     adapts(Interface, IDefaultBrowserLayer, UserDataPanel)
+
+    def __init__(self, context, request, form=UserDataPanel):
+        self.context = context
+        self.request = request
+        self.form = form
+
+
     def update(self):
         fields = Fields(IEnhancedUserDataSchema)
-        import pdb;pdb.set_trace()
+        #import pdb;pdb.set_trace()
         self.add(fields)
 
 
@@ -69,7 +79,7 @@ def verification_default_enabled():
     return settings.globally_enabled
 
 
-class IEnhancedUserDataSchema(IUserDataSchema):
+class IEnhancedUserDataSchema(model.Schema):
     """
     Extended user profile.
 

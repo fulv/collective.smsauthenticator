@@ -13,11 +13,11 @@ from six import text_type
 
 from zope.i18nmessageid import MessageFactory
 from zope.schema import TextLine
-from z3c.form import button, field
+from z3c.form import button, field, form
 
 from plone.supermodel.model import Schema
 from plone.autoform.form import AutoExtensibleForm
-from plone.autoform import directives as form
+from plone.autoform.directives import mode
 from plone import api
 from plone.z3cform.layout import wrap_form
 
@@ -52,7 +52,7 @@ class IRequestMobileNumberResetForm(Schema):
             <br/>Example International number: +49234555776"),
         required=True
     )
-    form.mode(note='display')
+    mode(note='display')
     note = TextLine(
             title=_(u"Important note"),
             default=u"",
@@ -63,7 +63,7 @@ class IRequestMobileNumberResetForm(Schema):
         )
 
 
-class RequestMobileNumberResetForm(AutoExtensibleForm):
+class RequestMobileNumberResetForm(AutoExtensibleForm, form.Form):
     """
     Form for request to reset to the SMS Authenticator mobile number form.
     """

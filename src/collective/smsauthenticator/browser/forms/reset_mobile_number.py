@@ -17,7 +17,7 @@ import logging
 
 from zope.i18nmessageid import MessageFactory
 
-from z3c.form import button, field
+from z3c.form import button, field, form
 
 from plone.supermodel.model import Schema
 from plone.autoform.form import AutoExtensibleForm
@@ -45,7 +45,7 @@ class IResetMobileNumberForm(Schema):
     )
 
 
-class ResetMobileNumberForm(AutoExtensibleForm):
+class ResetMobileNumberForm(AutoExtensibleForm, form.Form):
     """
     Form for the resetting the mobile number.
 

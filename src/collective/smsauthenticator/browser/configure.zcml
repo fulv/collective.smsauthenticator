@@ -131,6 +131,7 @@
         permission="zope2.View"
         />
 
+    <!--
     <browser:page
         for="Products.CMFPlone.Portal.PloneSite"
         name="personal-information"
@@ -138,6 +139,7 @@
         permission="cmf.SetOwnProperties"
         layer="collective.smsauthenticator.interfaces.ISMSAuthenticatorLayer"
         />
+    -->
 
 
     <browser:page

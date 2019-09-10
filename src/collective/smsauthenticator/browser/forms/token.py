@@ -7,7 +7,7 @@ import logging
 from zope.schema import TextLine
 from zope.i18nmessageid import MessageFactory
 
-from z3c.form import button, field
+from z3c.form import button, field, form
 from zope.i18n import translate
 
 from plone.supermodel.model import Schema
@@ -40,7 +40,7 @@ class ITokenForm(Schema):
         required=False)
 
 
-class TokenForm(AutoExtensibleForm):
+class TokenForm(AutoExtensibleForm, form.Form):
     """
     Form for the SMS Authenticator Token validation. Any user that has two-step verification enabled,
     uses this form upon logging in.
