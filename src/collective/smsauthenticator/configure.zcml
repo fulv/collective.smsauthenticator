@@ -67,6 +67,12 @@
         provides=".adapter.ICameFrom"
         factory=".adapter.CameFromAdapter" />
 
+    <adapter
+        factory="collective.smsauthenticator.adapter.RedirectAfterLoginAdapter"
+        for="OFS.interfaces.ITraversable
+             zope.publisher.interfaces.IRequest"
+        />
+
     <cmf:registerDirectory name="skins" directory="skins" recursive="True" />
 
     <!-- -*- Event fired on user creation -*- -->

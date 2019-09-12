@@ -1,3 +1,11 @@
+body.template-sms-authenticator-token.plone-toolbar-left-expanded {
+    padding-left: inherit;
+}
+
+body.template-sms-authenticator-token #edit-bar {
+    display: none;
+}
+
 #formfield-form-widgets-qr_code input { display: none; }
 form.kssattr-formname-new-user .kssattr-fieldname-form\.enable_two_step_verification {
     display: none;

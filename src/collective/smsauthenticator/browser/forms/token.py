@@ -36,7 +36,6 @@ class ITokenForm(Schema):
     """
     token = TextLine(
         title=_('Enter code'),
-        description=_('Enter the login code sent to your mobile number.'),
         required=False)
 
 
@@ -191,6 +190,17 @@ class TokenForm(AutoExtensibleForm, form.Form):
         self.request.response.redirect("{0}?{1}".format(self.request.ACTUAL_URL, self.request.QUERY_STRING))
 
 
+    @button.buttonAndHandler(_(u'Reset Mobile Number'))
+    def handleResetMobileNumber(self, action):
+        """
+        Handle reset Mobile Number redirect.
+        """
+
+        root_url = self.context.absolute_url()
+        reset_url = "{0}/@@request-mobile-number-reset".format(root_url)
+        self.request.response.redirect(reset_url)
+
+
     def updateFields(self, *args, **kwargs):
         """
         Here the following happens. Cookie set is cleared. Thus, user is no longer logged in, but only
@@ -202,18 +212,6 @@ class TokenForm(AutoExtensibleForm, form.Form):
         response = request['RESPONSE']
         if not request['REQUEST_METHOD'] == 'POST':
             response.setCookie('__ac', '', path='/')
-
-        # Updating the description
-        token_field = self.fields.get('token')
-        if token_field:
-            token_field.field.description = _(
-                'token_field_description',
-                default="""Enter the login code sent to your mobile number
-If you have somehow lost your mobile number, request a reset
-<a href='${absolute_url}/@@request-mobile-number-reset'>here</a>.
-If you didn't receive an SMS message, resend it by clicking
-the Resend SMS button below.""",
-                mapping={'absolute_url': self.context.absolute_url()})
 
         return super(TokenForm, self).updateFields(*args, **kwargs)
 

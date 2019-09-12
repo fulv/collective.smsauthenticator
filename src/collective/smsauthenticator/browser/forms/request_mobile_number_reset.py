@@ -1,6 +1,6 @@
 """
 Request the mobile number reset. What actually happens here, is that user provides his username
-and a mobile number. After that an confirmation email is sent to users' email address (taken
+and a mobile number. After that a confirmation email is sent to users' email address (taken
 from the profile). Also, an SMS message with code to reset the mobile number is immediately
 sent to the phone number given. No other information is specified in the SMS. Once user checks
 his email and follows the link given, he lands on the page on which he is supposed to fill in the
@@ -19,6 +19,7 @@ from plone.supermodel.model import Schema
 from plone.autoform.form import AutoExtensibleForm
 from plone.autoform.directives import mode
 from plone import api
+from plone.api.portal import get_registry_record as get_record
 from plone.z3cform.layout import wrap_form
 
 from Products.statusmessages.interfaces import IStatusMessage
@@ -50,7 +51,8 @@ class IRequestMobileNumberResetForm(Schema):
         description=_(u"Enter your mobile phone number. Use the international format.\
             <br/>Example Dutch number: +31699555555\
             <br/>Example International number: +49234555776"),
-        required=True
+        required=True,
+        default=u"+1",
     )
     mode(note='display')
     note = TextLine(
@@ -145,10 +147,15 @@ class RequestMobileNumberResetForm(AutoExtensibleForm, form.Form):
                 try:
                     host = getToolByName(self, 'MailHost')
 
+                    # TODO:  handle case of missing from name or address
+                    from_name = get_record('plone.email_from_name', 'Missing name')
+                    from_address = get_record('plone.email_from_address', 'Missing address')
                     mail_text_template = self.context.restrictedTraverse('request_mobile_number_reset_email')
                     mail_text = mail_text_template(
                         member = user,
                         mobile_number_reset_url = signed_url,
+                        from_name=from_name,
+                        from_address=from_address,
                         charset = 'utf-8'
                         )
                     mail_text = mail_text.format(mobile_number_reset_url=signed_url)

@@ -1,10 +1,14 @@
 import logging
 
-from zope.interface import Interface, implements
-
-from plone.app.users.browser.userdatapanel import UserDataPanelAdapter
 from collective.smsauthenticator.helpers import extract_next_url_from_referer
+from collective.smsauthenticator.helpers import sign_user_data
 from collective.smsauthenticator.userdataschema import IEnhancedUserDataSchema
+from plone import api
+from plone.app.users.browser.userdatapanel import UserDataPanelAdapter
+from Products.CMFPlone.interfaces import IRedirectAfterLogin
+from Products.statusmessages import STATUSMESSAGEKEY
+from zope.interface import Interface, implements
+from zope.annotation.interfaces import IAnnotations
 
 logger = logging.getLogger(__file__)
 
@@ -183,3 +187,36 @@ class CameFromAdapter(object):
         :return string:
         """
         return extract_next_url_from_referer(self.request)
+
+
+class RedirectAfterLoginAdapter(object):
+    implements(IRedirectAfterLogin)
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def __call__(self, came_from=None, is_initial_login=False):
+
+        # First, we clear the status message set by handleLogin
+        annotations = IAnnotations(self.request)
+        self.request.cookies[STATUSMESSAGEKEY] = None
+        annotations[STATUSMESSAGEKEY] = None
+
+        user = api.user.get_current()
+        msg = u"""Enter the login code sent to your mobile number.
+If you have somehow lost your mobile number, request a reset by clicking the Reset Mobile Number button. If you didn't receive an SMS message, resend it by clicking the Resend SMS button below.""".format(
+            self.context.absolute_url()
+        )
+        api.portal.show_message(msg, self.request)
+        # Redirect to token thing...
+        signed_url = sign_user_data(
+            request=self.request, user=user, url='@@sms-authenticator-token')
+
+        came_from_adapter = ICameFrom(self.request)
+        # Appending possible `came_from`, but give it another name.
+        came_from = came_from_adapter.getCameFrom()
+        if came_from:
+            signed_url = '{0}&next_url={1}'.format(signed_url, came_from)
+        return signed_url
+

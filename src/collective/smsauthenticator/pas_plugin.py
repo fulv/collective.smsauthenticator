@@ -124,6 +124,7 @@ class SMSAuthenticatorPlugin(BasePlugin):
             came_from = came_from_adapter.getCameFrom()
             if came_from:
                 signed_url = '{0}&next_url={1}'.format(signed_url, came_from)
+            #request.form['came_from'] = signed_url
 
             # ****************************************
             # Generate the login code and send the SMS
@@ -164,7 +165,6 @@ class SMSAuthenticatorPlugin(BasePlugin):
                     )
 
             # Redirecting user to authentication code validation page.
-            import pdb;pdb.set_trace()
             response.redirect(signed_url, lock=1)
             return None
 
