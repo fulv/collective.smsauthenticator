@@ -148,8 +148,8 @@ class RequestMobileNumberResetForm(AutoExtensibleForm, form.Form):
                     host = getToolByName(self, 'MailHost')
 
                     # TODO:  handle case of missing from name or address
-                    from_name = get_record('plone.email_from_name', 'Missing name')
-                    from_address = get_record('plone.email_from_address', 'Missing address')
+                    from_name = get_record('plone.email_from_name', default='Missing name')
+                    from_address = get_record('plone.email_from_address', default='Missing address')
                     mail_text_template = self.context.restrictedTraverse('request_mobile_number_reset_email')
                     mail_text = mail_text_template(
                         member = user,
