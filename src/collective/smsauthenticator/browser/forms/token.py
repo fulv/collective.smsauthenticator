@@ -7,7 +7,9 @@ import logging
 from zope.schema import TextLine
 from zope.i18nmessageid import MessageFactory
 
-from z3c.form import button, field, form
+from z3c.form import button
+from z3c.form import field
+from z3c.form import form
 from zope.i18n import translate
 
 from plone.supermodel.model import Schema

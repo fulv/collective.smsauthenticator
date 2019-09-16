@@ -45,7 +45,6 @@ _ = MessageFactory('collective.smsauthenticator')
 #            # 'authentication_token_valid_until',
 #            )
 
-#class CustomizedUserDataPanel(extensible.FormExtender, form.Form):
 class CustomizedUserDataPanel(extensible.FormExtender):
     adapts(Interface, IDefaultBrowserLayer, UserDataPanel)
 
@@ -57,7 +56,6 @@ class CustomizedUserDataPanel(extensible.FormExtender):
 
     def update(self):
         fields = Fields(IEnhancedUserDataSchema)
-        #import pdb;pdb.set_trace()
         self.add(fields)
 
 
@@ -176,3 +174,20 @@ def userCreatedHandler(principal, event):
 
     logger.debug(user.getProperty('enable_two_step_verification'))
     logger.debug(user.getProperty('two_step_verification_secret'))
+
+
+class CustomizedUserDataPanel(extensible.FormExtender):
+    adapts(Interface, IDefaultBrowserLayer, UserDataPanel)
+
+    def __init__(self, context, request, form=None):
+        self.context = context
+        self.request = request
+        self.form = form
+
+    def update(self):
+        fields = Fields(IEnhancedUserDataSchema)
+
+        import pdb;pdb.set_trace()
+        self.add(fields)
+
+

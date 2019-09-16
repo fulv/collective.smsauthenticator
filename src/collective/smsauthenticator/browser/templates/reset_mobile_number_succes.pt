@@ -8,7 +8,7 @@
     <metal:main fill-slot="main">
     <h1 class="documentFirstHeading" i18n:translate="">Request to (re)set the mobile number</h1>
 
-    <p i18n:translate="">An e-mail has been sent to your e-mailadres with a link to complete your request.
+    <p i18n:translate="">An e-mail has been sent to your e-mail adress with a link to complete your request.
     <br/>Please open the link provided in the e-mail and enter the code received on your mobile phone.
     </p>
     </metal:main>

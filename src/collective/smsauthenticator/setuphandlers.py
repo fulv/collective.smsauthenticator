@@ -104,7 +104,7 @@ def uninstall(context):
     portal = context.getSite()
     pas = portal.acl_users
     _remove_plugin(pas)
-    uninstall_persistent_userdataschemaprovider(context)
+    #uninstall_persistent_userdataschemaprovider(context)
 
 
 #def uninstall_persistent_userdataschemaprovider(context):

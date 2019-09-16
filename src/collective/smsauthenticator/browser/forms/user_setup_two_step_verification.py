@@ -6,7 +6,9 @@ import logging
 
 from zope.i18nmessageid import MessageFactory
 
-from z3c.form import button, field, form
+from z3c.form import button
+from z3c.form import field
+from z3c.form import form
 
 from plone.supermodel.model import Schema
 from plone.autoform.form import AutoExtensibleForm

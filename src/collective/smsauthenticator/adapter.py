@@ -205,9 +205,8 @@ class RedirectAfterLoginAdapter(object):
 
         user = api.user.get_current()
         msg = u"""Enter the login code sent to your mobile number.
-If you have somehow lost your mobile number, request a reset by clicking the Reset Mobile Number button. If you didn't receive an SMS message, resend it by clicking the Resend SMS button below.""".format(
-            self.context.absolute_url()
-        )
+If you have somehow lost your mobile number, request a reset by clicking the Reset Mobile Number button. If you didn't receive an SMS message, resend it by clicking the Resend SMS button below."""
+
         api.portal.show_message(msg, self.request)
         # Redirect to token thing...
         signed_url = sign_user_data(
