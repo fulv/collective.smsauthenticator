@@ -187,7 +187,6 @@ class CustomizedUserDataPanel(extensible.FormExtender):
     def update(self):
         fields = Fields(IEnhancedUserDataSchema)
 
-        import pdb;pdb.set_trace()
         self.add(fields)
 
 
