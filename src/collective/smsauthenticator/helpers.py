@@ -153,8 +153,8 @@ def generate_code(user, length=6):
     :return string:
     """
     secret = get_or_create_secret(user)
-    return sha1("{0}{1}{2}".format(
-        str(uuid4()), str(randint(0, 9)), secret)).hexdigest()[:8]
+    return str(int(sha1("{0}{1}{2}".format(
+        str(uuid4()), str(randint(0, 9)), secret)).hexdigest(), 16))[:6]
 
 
 def validate_code(code, prop, user=None):
