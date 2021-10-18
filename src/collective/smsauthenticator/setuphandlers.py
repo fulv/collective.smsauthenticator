@@ -72,7 +72,7 @@ def _setup_secret_key(portal):
 
     settings = get_app_settings()
     if not settings.ska_secret_key:
-        settings.ska_secret_key = unicode(uuid4())
+        settings.ska_secret_key = str(uuid4())
 
 
 def setupVarious(context):
