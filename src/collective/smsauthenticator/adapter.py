@@ -7,7 +7,7 @@ from plone import api
 from plone.app.users.browser.userdatapanel import UserDataPanelAdapter
 from Products.CMFPlone.interfaces import IRedirectAfterLogin
 from Products.statusmessages import STATUSMESSAGEKEY
-from zope.interface import Interface, implements
+from zope.interface import Interface, implementer
 from zope.annotation.interfaces import IAnnotations
 
 logger = logging.getLogger(__file__)
@@ -139,6 +139,7 @@ class ICameFrom(Interface):
     """
 
 
+@implementer(ICameFrom)
 class CameFromAdapter(object):
     """
     Came from handling.
@@ -172,7 +173,6 @@ class CameFromAdapter(object):
     >>>         referrer = "{0}/tac-form/?came_from={1}".format(portal.portal_url(), real_referrer)
     >>>         return referrer
     """
-    implements(ICameFrom)
 
     def __init__(self, request):
         """
@@ -189,8 +189,8 @@ class CameFromAdapter(object):
         return extract_next_url_from_referer(self.request)
 
 
+@implementer(IRedirectAfterLogin)
 class RedirectAfterLoginAdapter(object):
-    implements(IRedirectAfterLogin)
 
     def __init__(self, context, request):
         self.context = context

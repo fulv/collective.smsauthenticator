@@ -196,7 +196,7 @@ class SMSAuthenticatorSettingsEditForm(AutoExtensibleForm, form.EditForm):
             import enable_two_step_verification_for_users
 
         if changes:
-            changed_fields = changes.values()[0]
+            changed_fields = list(changes.values())[0]
             # Only enable two factor for all if globally enabled
             # is turned on in this save. Otherwise, leave users alone.
             if 'globally_enabled' in changed_fields:
