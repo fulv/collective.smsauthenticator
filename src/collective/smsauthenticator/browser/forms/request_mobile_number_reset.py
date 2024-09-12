@@ -1,6 +1,6 @@
 """
 Request the mobile number reset. What actually happens here, is that user provides his username
-and a mobile number. After that an confirmation email is sent to users' email address (taken
+and a mobile number. After that a confirmation email is sent to users' email address (taken
 from the profile). Also, an SMS message with code to reset the mobile number is immediately
 sent to the phone number given. No other information is specified in the SMS. Once user checks
 his email and follows the link given, he lands on the page on which he is supposed to fill in the
@@ -13,10 +13,13 @@ from six import text_type
 
 from zope.i18nmessageid import MessageFactory
 from zope.schema import TextLine
-from z3c.form import button, field
+from z3c.form import button, field, form
 
-from plone.directives import form
+from plone.supermodel.model import Schema
+from plone.autoform.form import AutoExtensibleForm
+from plone.autoform.directives import mode
 from plone import api
+from plone.api.portal import get_registry_record as get_record
 from plone.z3cform.layout import wrap_form
 
 from Products.statusmessages.interfaces import IStatusMessage
@@ -34,7 +37,7 @@ logger = logging.getLogger('collective.smsauthenticator')
 _ = MessageFactory('collective.smsauthenticator')
 
 
-class IRequestMobileNumberResetForm(form.Schema):
+class IRequestMobileNumberResetForm(Schema):
     """
     Interface for the request to reset the SMS Authenticator mobile number form.
     """
@@ -48,9 +51,10 @@ class IRequestMobileNumberResetForm(form.Schema):
         description=_(u"Enter your mobile phone number. Use the international format.\
             <br/>Example Dutch number: +31699555555\
             <br/>Example International number: +49234555776"),
-        required=True
+        required=True,
+        default=u"+1",
     )
-    form.mode(note='display')
+    mode(note='display')
     note = TextLine(
             title=_(u"Important note"),
             default=u"",
@@ -61,7 +65,7 @@ class IRequestMobileNumberResetForm(form.Schema):
         )
 
 
-class RequestMobileNumberResetForm(form.SchemaForm):
+class RequestMobileNumberResetForm(AutoExtensibleForm, form.Form):
     """
     Form for request to reset to the SMS Authenticator mobile number form.
     """
@@ -143,10 +147,15 @@ class RequestMobileNumberResetForm(form.SchemaForm):
                 try:
                     host = getToolByName(self, 'MailHost')
 
+                    # TODO:  handle case of missing from name or address
+                    from_name = get_record('plone.email_from_name', default='Missing name')
+                    from_address = get_record('plone.email_from_address', default='Missing address')
                     mail_text_template = self.context.restrictedTraverse('request_mobile_number_reset_email')
                     mail_text = mail_text_template(
                         member = user,
                         mobile_number_reset_url = signed_url,
+                        from_name=from_name,
+                        from_address=from_address,
                         charset = 'utf-8'
                         )
                     mail_text = mail_text.format(mobile_number_reset_url=signed_url)

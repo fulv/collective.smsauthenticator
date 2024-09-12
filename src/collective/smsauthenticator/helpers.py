@@ -13,8 +13,8 @@ from twilio.rest import Client as TwilioRestClient
 from twilio.base.exceptions import TwilioRestException as TwilioException
 from messagebird import Client as MessagebirdClient
 from messagebird.client import ErrorException as MessagebirdException
-from urllib import unquote, quote
-from urlparse import urlparse
+from six.moves.urllib.parse import unquote, quote
+from urllib.parse import urlparse
 from uuid import uuid4
 from zope.component import getUtility
 from zope.globalrequest import getRequest
@@ -153,8 +153,8 @@ def generate_code(user, length=6):
     :return string:
     """
     secret = get_or_create_secret(user)
-    return sha1("{0}{1}{2}".format(
-        str(uuid4()), str(randint(0, 9)), secret)).hexdigest()[:8]
+    return str(int(sha1("{0}{1}{2}".format(
+        str(uuid4()), str(randint(0, 9)), secret)).hexdigest(), 16))[:6]
 
 
 def validate_code(code, prop, user=None):

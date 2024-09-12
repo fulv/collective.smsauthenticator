@@ -9,7 +9,7 @@ is set to False), then do nothing so that Plone continues logging in the user no
 """
 import logging
 
-from Globals import InitializeClass
+from App.class_init import InitializeClass
 from AccessControl.SecurityInfo import ClassSecurityInfo
 
 from zope.i18nmessageid import MessageFactory
@@ -124,6 +124,7 @@ class SMSAuthenticatorPlugin(BasePlugin):
             came_from = came_from_adapter.getCameFrom()
             if came_from:
                 signed_url = '{0}&next_url={1}'.format(signed_url, came_from)
+            #request.form['came_from'] = signed_url
 
             # ****************************************
             # Generate the login code and send the SMS
